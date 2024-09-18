@@ -22,4 +22,10 @@
         android:name="au.edu.swin.sdmd.l08_inafile.ui.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_longtask"
+        android:name="au.edu.swin.sdmd.l08_inafile.ui.longtask.LongTaskFragment"
+        android:label="@string/title_longtask"
+        tools:layout="@layout/fragment_longtask" />
 </navigation>
