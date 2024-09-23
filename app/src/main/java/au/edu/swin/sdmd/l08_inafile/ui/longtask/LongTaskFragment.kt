@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import au.edu.swin.sdmd.l08_inafile.ButtonViewModel
 import au.edu.swin.sdmd.l08_inafile.R
 import au.edu.swin.sdmd.l08_inafile.data.LoooooooongFile
@@ -58,6 +61,17 @@ class LongTaskFragment : Fragment() {
                 writeFile(context, listLength)
                 binding.bLong.isEnabled = true
                 //viewModel.buttonState.postValue(true)
+            }
+        }
+
+        binding.bWorker.setOnClickListener {
+            context?.let {
+                val uploadWorkRequest: WorkRequest =
+                    OneTimeWorkRequestBuilder<LongFileWorker>()
+                        .build()
+                WorkManager
+                    .getInstance(it)
+                    .enqueue(uploadWorkRequest)
             }
         }
 
