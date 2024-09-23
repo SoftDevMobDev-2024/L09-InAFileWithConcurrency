@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import au.edu.swin.sdmd.l08_inafile.ButtonViewModel
 import au.edu.swin.sdmd.l08_inafile.R
+import au.edu.swin.sdmd.l08_inafile.data.KeyStore
 import au.edu.swin.sdmd.l08_inafile.data.LoooooooongFile
 import au.edu.swin.sdmd.l08_inafile.databinding.FragmentLongtaskBinding
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +25,7 @@ class LongTaskFragment : Fragment() {
     private var _binding: FragmentLongtaskBinding? = null
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val scope2 = CoroutineScope(Dispatchers.Main + job)
     private val viewModel: ButtonViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
@@ -40,14 +42,30 @@ class LongTaskFragment : Fragment() {
         _binding = FragmentLongtaskBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        context?.let {
+            val store = KeyStore(it)
+            // if option saved, updated checkboxgroup
+            val job = scope.launch {
+                store.getOption.collect { option ->
+                    binding.radioGroup.check(option)
+                }
+            }
+            // if checkbox selected, save option id
+            binding.radioGroup.setOnCheckedChangeListener { _, i ->
+                val job = scope.launch {
+                    store.saveOption(i)
+                }
+            }
+        }
+
         val buttonObserver = Observer<Boolean> { state ->
             binding.bLong.isEnabled = state
         }
         viewModel.buttonState.observe(viewLifecycleOwner, buttonObserver)
 
         binding.bLong.setOnClickListener {
-            binding.bLong.isEnabled = false
-            //viewModel.buttonState.value = false
+            //binding.bLong.isEnabled = false
+            viewModel.buttonState.value = false
             val listLength = when(binding.radioGroup.checkedRadioButtonId) {
                 R.id.shortList -> 1000
                 R.id.mediumList -> 10000
@@ -56,8 +74,8 @@ class LongTaskFragment : Fragment() {
             }
             scope.launch {
                 writeFile(context, listLength)
-                binding.bLong.isEnabled = true
-                //viewModel.buttonState.postValue(true)
+                //binding.bLong.isEnabled = true
+                viewModel.buttonState.postValue(true)
             }
         }
 
