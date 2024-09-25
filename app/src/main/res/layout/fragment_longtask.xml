@@ -44,6 +44,12 @@
             android:layout_height="wrap_content"
             android:text="@string/longlist" />
 
+        <Button
+            android:id="@+id/bCache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cache" />
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

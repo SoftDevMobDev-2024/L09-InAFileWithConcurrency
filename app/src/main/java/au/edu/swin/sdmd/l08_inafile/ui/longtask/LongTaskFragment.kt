@@ -16,6 +16,11 @@ import au.edu.swin.sdmd.l08_inafile.databinding.FragmentLongtaskBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
+
+
 
 
 class LongTaskFragment : Fragment() {
@@ -58,6 +63,15 @@ class LongTaskFragment : Fragment() {
             }
         }
 
+        binding.bCache.setOnClickListener {
+            binding.bCache.isEnabled = false
+            val listLength = 100
+            viewLifecycleOwner.lifecycleScope.launch {
+                writeCache(context, listLength)
+                binding.bCache.isEnabled = true
+            }
+        }
+
         return root
     }
 
@@ -75,6 +89,21 @@ class LongTaskFragment : Fragment() {
                     LoooooooongFile.appendInput(it, "$i = $sBinary")
                 }
                 LoooooooongFile.closeFile(it)
+            }
+        }
+    }
+
+    private suspend fun writeCache(context: Context?, listLength: Int) {
+        withContext(Dispatchers.IO) {
+            context?.let {
+                //File.createTempFile("temp_file", null, context.cacheDir)
+                val cacheFile = File(context.cacheDir, "temp_file")
+                val bw = BufferedWriter(FileWriter(cacheFile.absoluteFile))
+                    for (i in 1..listLength) {
+                    val sBinary = Integer.toBinaryString(i)
+                    bw.write("$i = $sBinary\n")
+                }
+                bw.close()
             }
         }
     }
