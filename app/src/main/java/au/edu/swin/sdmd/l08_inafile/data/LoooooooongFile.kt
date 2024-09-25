@@ -15,4 +15,8 @@ object LoooooooongFile {
     fun deleteFile(context: Context) {
         context.deleteFile(filename)
     }
+
+    fun closeFile(context: Context) {
+        context.openFileOutput(filename, Context.MODE_APPEND).close()
+    }
 }
