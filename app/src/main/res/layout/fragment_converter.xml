@@ -33,5 +33,10 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvFact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
