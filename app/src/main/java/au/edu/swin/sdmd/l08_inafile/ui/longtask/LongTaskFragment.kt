@@ -96,7 +96,6 @@ class LongTaskFragment : Fragment() {
     private suspend fun writeCache(context: Context?, listLength: Int) {
         withContext(Dispatchers.IO) {
             context?.let {
-                //File.createTempFile("temp_file", null, context.cacheDir)
                 val cacheFile = File(context.cacheDir, "temp_file")
                 val bw = BufferedWriter(FileWriter(cacheFile.absoluteFile))
                     for (i in 1..listLength) {
@@ -106,5 +105,10 @@ class LongTaskFragment : Fragment() {
                 bw.close()
             }
         }
+    }
+
+    override fun onDestroy() {
+        File(context?.cacheDir, "temp_file").delete()
+        super.onDestroy()
     }
 }
