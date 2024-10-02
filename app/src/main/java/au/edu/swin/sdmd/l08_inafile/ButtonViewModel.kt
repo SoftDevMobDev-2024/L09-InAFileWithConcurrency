@@ -7,4 +7,8 @@ class ButtonViewModel: ViewModel() {
     val buttonState: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+
+    val checkboxState: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
+    }
 }

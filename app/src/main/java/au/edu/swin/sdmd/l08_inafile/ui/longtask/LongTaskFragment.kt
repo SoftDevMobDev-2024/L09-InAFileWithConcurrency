@@ -42,12 +42,17 @@ class LongTaskFragment : Fragment() {
         _binding = FragmentLongtaskBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val checkboxObserver = Observer<Int> { state ->
+            binding.radioGroup.check(state)
+        }
+        viewModel.checkboxState.observe(viewLifecycleOwner, checkboxObserver)
+
         context?.let {
             val store = KeyStore(it)
             // if option saved, updated checkboxgroup
             val job = scope.launch {
                 store.getOption.collect { option ->
-                    binding.radioGroup.check(option)
+                    viewModel.checkboxState.postValue(option)
                 }
             }
             // if checkbox selected, save option id
